@@ -1,0 +1,14 @@
+[
+  {
+    "id": "game_001",
+    "name": "Yes, And Circle",
+    "category": "warmup",
+    "difficulty": "easy"
+  },
+  {
+    "id": "game_002",
+    "name": "Word Association Chain",
+    "category": "focus",
+    "difficulty": "easy"
+  }
+]

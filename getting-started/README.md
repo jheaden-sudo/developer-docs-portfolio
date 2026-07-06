@@ -1,10 +1,10 @@
 # Getting Started
 
 ## Overview
-Improv Workshop API is a REST API for browsing and retrieving structured improv games. It allows developers to fetch game ideas, filter by category, and retrieve lesson-style prompts for training or workshops.
+Improv Workshop API is a REST API that serves structured improv game data for workshop facilitators and training tools.
 
 ## Base URL
-https://api.improv-workshop.dev/v1  (this is not real yet)
+http://localhost:3000
 
 ## Prerequisites
 - API key (fictional for this portfolio project)
