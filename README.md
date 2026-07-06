@@ -1,2 +1,2 @@
 # developer-docs-portfolio
-My portfolio as of July 2026
+This is a working API and the documentation about how to use it.
