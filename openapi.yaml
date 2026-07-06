@@ -1,0 +1,83 @@
+openapi: 3.0.3
+
+info:
+  title: Improv API
+  description: API for exploring improv games, teaching activities, and class resources.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /games:
+    get:
+      summary: Returns a list of available improv games
+      description: Retrieves improv games that can be used for classes, workshops, and team-building activities.
+      responses:
+        "200":
+          description: A list of improv games
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Game"
+
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the game
+          example: game_001
+
+        name:
+          type: string
+          description: Name of the improv game
+          example: Yes, And Circle
+
+        description:
+          type: string
+          description: Overview of how the game is played
+          example: Players practice agreement and collaboration by building on each other's ideas.
+
+        categories:
+          type: array
+          description: Categories that describe how the game can be used
+          items:
+            type: string
+          example:
+            - warmup
+            - skills
+            - teambuilding
+
+        skills_practiced:
+          type: array
+          description: Skills developed through the exercise
+          items:
+            type: string
+          example:
+            - listening
+            - agreement
+            - risk_taking
+
+        player_count:
+          type: string
+          description: Recommended group format for the exercise
+          enum:
+            - solo
+            - pairs
+            - small_group
+            - whole_class
+          example: whole_class
+
+        notes:
+          type: string
+          description: Instructor notes, observations, and teaching tips
+          example: Encourages players to make bold choices and discover that unexpected responses can create entertaining moments.
+          
