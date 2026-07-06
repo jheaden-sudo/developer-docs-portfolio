@@ -26,14 +26,12 @@ Example response:
     {
       "id": "game_001",
       "name": "Yes, And Circle",
-      "category": "warmup",
-      "difficulty": "easy"
+      "category": "warmup"
     },
     {
       "id": "game_002",
       "name": "Word Association Chain",
-      "category": "focus",
-      "difficulty": "easy"
+      "category": "focus"
     }
   ]
 }
@@ -45,5 +43,4 @@ Example response:
 |---|---|---|
 | id | string | Unique identifier for the game |
 | name | string | Name of the improv game |
-| category | string | Game category: Warm-up, Skill, Performance, Other |
-| difficulty | string | Difficulty level: Beginner, Pro |
+| category | string | Game category: warmup, skill, performance, other |
