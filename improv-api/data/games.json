@@ -49,5 +49,23 @@
     ],
     "player_count": "pairs",
     "notes": "Players directly learn about each other, indirectly learn that bold choices are more fun, even if their assumption is wrong."
+  },
+    {
+    "id": "game_004",
+    "name": "I Like Biscuits",
+    "description": "Players attempt to mirror a phrase and action and pass it on.",
+    "categories": [
+      "warmup",
+      "teambuilding",
+      "skills"
+    ],
+    "skills_practiced": [
+      "listening",
+      "observation",
+      "risk_taking",
+      "bold_choices"
+    ],
+    "player_count": "whole_class",
+    "notes": "The idea is for players to copy 'exactly what you see' and let your own natural physicality change the action. It's funniest if you don't try to be funny. This is very important. Best played in a safe space where 'mistakes' are celebrated. Should make class dissolve into fits of laugher if done correctly."
   }
 ]
