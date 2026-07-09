@@ -17,3 +17,4 @@ http://localhost:3000
 ```bash
 curl https://api.improv-workshop.dev/v1/games \
   -H "Authorization: Bearer YOUR_API_KEY"
+```
