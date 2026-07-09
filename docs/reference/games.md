@@ -16,7 +16,7 @@ GET /games
     {
       "id": "game_001",
       "name": "Yes, And Circle",
-      "description": "Players stand in a circle...",
+      "description": "Players stand in a circle and tell a story one line at a time.",
       "categories": [
         "warmup",
         "skills",
@@ -26,8 +26,8 @@ GET /games
         "listening",
         "agreement"
       ],
-      "player_count": "whole_class",
-      "notes": "After the first round..."
+      "player_format": "group",
+      "notes": "After the first round, drop saying \"Yes, and...\"."
     }
   ]
 }
@@ -42,5 +42,5 @@ GET /games
 | description | string | Instructions |
 | categories | array | Categories |
 | skills_practiced | array | Skills learned |
-| player_count | string | Suggested group size |
+| player_format | string | Recommended participation format (solo, pairs, small_group, group, everyone) |
 | notes | string | Teaching notes |

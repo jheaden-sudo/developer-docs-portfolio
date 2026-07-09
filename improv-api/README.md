@@ -37,7 +37,7 @@ Example response:
         "agreement",
         "risk_taking"
       ],
-      "player_count": "whole_class",
+      "player_format": "group",
       "notes": "A simple starting exercise that helps students embrace unexpected ideas."
     }
   ]
