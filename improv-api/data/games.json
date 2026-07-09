@@ -12,7 +12,7 @@
       "listening",
       "agreement"
     ],
-    "player_count": "whole_class",
+    "player_format": "group",
     "notes": "After the first round, drop saying \"Yes, and...\" Correct students immediately if someone says \"no\" or \"but\"."
   },
   {
@@ -28,7 +28,7 @@
       "quick_thinking",
       "focus"
     ],
-    "player_count": "small_group",
+    "player_format": "small_group",
     "notes": "Note exceptionally clever word associations that satisfy the other players. After going around the circle at least once, try repeating everything in reverse to build short-term memory recall. Can also be played like Categories."
   },
   {
@@ -46,7 +46,7 @@
       "risk_taking",
       "bold_choices"
     ],
-    "player_count": "pairs",
+    "player_format": "pairs",
     "notes": "Players directly learn about each other and indirectly learn that bold choices are more fun, even when assumptions are wrong."
   },
   {
@@ -64,7 +64,7 @@
       "risk_taking",
       "bold_choices"
     ],
-    "player_count": "whole_class",
+    "player_format": "everyone",
     "notes": "The goal is to copy exactly what you see and allow your own natural physicality to influence the action. It's funniest when you aren't trying to be funny. Best played in a safe environment where mistakes are celebrated."
   },
   {
@@ -81,7 +81,7 @@
       "risk_taking",
       "bold_choices"
     ],
-    "player_count": "pairs",
+    "player_format": "pairs",
     "notes": "Useful for encouraging flexibility and maintaining a safe classroom. If someone says something inappropriate, immediately call \"New Choice!\" This game works especially well after several rounds of Categories."
   },
   {
@@ -99,7 +99,7 @@
       "risk_taking",
       "bold_choices"
     ],
-    "player_count": "whole_class",
+    "player_format": "everyone",
     "notes": "This game captures the spirit of saying 'and' in improv. Play it early and often. It also makes an excellent warm-up before Jump-Out games."
   }
 ]
