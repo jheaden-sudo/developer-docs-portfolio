@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +9,35 @@
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
+            background: #f8f8f8;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .dashboard {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        input, select {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: white;
         }
 
         table {
@@ -25,15 +55,42 @@
         th {
             background: #eee;
         }
+
+        .status {
+            font-weight: bold;
+        }
     </style>
 </head>
+
 <body>
 
-<h1>Improv Games</h1>
+<h1>Improv API Admin</h1>
 
-<p id="status">Loading...</p>
+<div class="dashboard">
+    <p class="status" id="status">Connecting to API...</p>
+    <p>Endpoint: <code>GET /games</code></p>
+</div>
+
+
+<div class="controls">
+
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search games..."
+    >
+
+    <select id="categoryFilter">
+        <option value="">All Categories</option>
+    </select>
+
+</div>
+
+
+<div class="table-container">
 
 <table id="gamesTable">
+
     <thead>
         <tr>
             <th>ID</th>
@@ -47,42 +104,152 @@
     </thead>
 
     <tbody>
-
     </tbody>
+
 </table>
+
+</div>
+
 
 <script>
 
+let games = [];
+
+
 fetch("/games")
-    .then(response => response.json())
+
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error("API request failed");
+        }
+
+        return response.json();
+
+    })
+
     .then(result => {
 
-        const tbody = document.querySelector("#gamesTable tbody");
+        games = result.data;
 
-        result.data.forEach(game => {
-
-            const row = document.createElement("tr");
-
-            row.innerHTML = `
-                <td>${game.id}</td>
-                <td>${game.name}</td>
-                <td>${game.description}</td>
-                <td>${game.categories.join(", ")}</td>
-                <td>${game.skills_practiced.join(", ")}</td>
-                <td>${game.player_count}</td>
-                <td>${game.notes}</td>
-            `;
-
-            tbody.appendChild(row);
-
-        });
+        populateCategories();
+        renderGames(games);
 
         document.getElementById("status").textContent =
-            `${result.data.length} games loaded`;
+            `${games.length} games loaded`;
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("status").textContent =
+            "Unable to load games";
+
+        console.error(error);
 
     });
+
+
+
+function renderGames(gameList) {
+
+    const tbody = document.querySelector("#gamesTable tbody");
+
+    tbody.innerHTML = "";
+
+    gameList.forEach(game => {
+
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${game.id}</td>
+            <td>${game.name}</td>
+            <td>${game.description}</td>
+            <td>${game.categories.join(", ")}</td>
+            <td>${game.skills_practiced.join(", ")}</td>
+            <td>${game.player_count}</td>
+            <td>${game.notes}</td>
+        `;
+
+        tbody.appendChild(row);
+
+    });
+
+}
+
+
+
+function populateCategories() {
+
+    const select = document.getElementById("categoryFilter");
+
+    const categories = [
+        ...new Set(
+            games.flatMap(game => game.categories)
+        )
+    ];
+
+    categories.sort();
+
+    categories.forEach(category => {
+
+        const option = document.createElement("option");
+
+        option.value = category;
+        option.textContent = category;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+
+document.getElementById("searchInput")
+    .addEventListener("input", filterGames);
+
+
+document.getElementById("categoryFilter")
+    .addEventListener("change", filterGames);
+
+
+
+function filterGames() {
+
+    const search =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+    const category =
+        document.getElementById("categoryFilter")
+        .value;
+
+
+    const filtered = games.filter(game => {
+
+        const matchesSearch =
+            game.name.toLowerCase().includes(search) ||
+            game.description.toLowerCase().includes(search);
+
+
+        const matchesCategory =
+            !category ||
+            game.categories.includes(category);
+
+
+        return matchesSearch && matchesCategory;
+
+    });
+
+
+    renderGames(filtered);
+
+}
 
 </script>
 
 </body>
 </html>
+```
