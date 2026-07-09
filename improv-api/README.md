@@ -26,8 +26,19 @@ Example response:
     {
       "id": "game_001",
       "name": "Yes, And Circle",
-      "category": "warmup",
-      "difficulty": "easy"
+      "description": "Players build on each other's ideas while practicing agreement and listening.",
+      "categories": [
+        "warmup",
+        "skills",
+        "teambuilding"
+      ],
+      "skills_practiced": [
+        "listening",
+        "agreement",
+        "risk_taking"
+      ],
+      "player_count": "whole_class",
+      "notes": "A simple starting exercise that helps students embrace unexpected ideas."
     }
   ]
 }
