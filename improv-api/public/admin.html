@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Improv API Admin</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Improv Games</h1>
+
+<p id="status">Loading...</p>
+
+<table id="gamesTable">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Categories</th>
+            <th>Skills</th>
+            <th>Players</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    </tbody>
+</table>
+
+<script>
+
+fetch("/games")
+    .then(response => response.json())
+    .then(result => {
+
+        const tbody = document.querySelector("#gamesTable tbody");
+
+        result.data.forEach(game => {
+
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${game.id}</td>
+                <td>${game.name}</td>
+                <td>${game.description}</td>
+                <td>${game.categories.join(", ")}</td>
+                <td>${game.skills_practiced.join(", ")}</td>
+                <td>${game.player_count}</td>
+                <td>${game.notes}</td>
+            `;
+
+            tbody.appendChild(row);
+
+        });
+
+        document.getElementById("status").textContent =
+            `${result.data.length} games loaded`;
+
+    });
+
+</script>
+
+</body>
+</html>
