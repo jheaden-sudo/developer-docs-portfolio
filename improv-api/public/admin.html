@@ -29,6 +29,17 @@
             margin: 20px 0;
         }
 
+        .column-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .column-controls label {
+            margin-right: 10px;
+        }
+
         input, select, textarea {
             padding: 8px;
             font-size: 14px;
@@ -57,6 +68,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            table-layout: auto;
         }
 
         th, td {
@@ -64,6 +76,12 @@
             padding: 8px;
             text-align: left;
             vertical-align: top;
+        }
+
+        #gamesTable th:nth-child(2),
+        #gamesTable td:nth-child(2) {
+            width: 1%;
+            white-space: nowrap;
         }
 
         th {
@@ -75,249 +93,185 @@
         }
     </style>
 </head>
-
 <body>
+    <h1>Improv API Admin</h1>
 
-<h1>Improv API Admin</h1>
+    <div class="dashboard">
+        <p class="status" id="status">Connecting to API...</p>
+        <p>Endpoint: <code>GET /games</code></p>
+    </div>
 
-<div class="dashboard">
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Search games...">
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+        </select>
+    </div>
 
-    <p class="status" id="status">
-        Connecting to API...
-    </p>
+    <div class="controls">
+        <button id="editButton" onclick="enableEditMode()">Edit Mode</button>
+        <button id="saveButton" onclick="saveChanges()" disabled>Save Changes</button>
+        <button id="cancelButton" onclick="cancelEdit()" disabled>Cancel</button>
+    </div>
 
-    <p>
-        Endpoint:
-        <code>GET /games</code>
-    </p>
+    <div class="dashboard">
+        <strong>Visible Columns</strong>
+        <div class="column-controls">
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="0" checked>
+                ID
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="1" checked>
+                Name
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="2" checked>
+                Description
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="3" checked>
+                Categories
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="4" checked>
+                Skills
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="5" checked>
+                Format
+            </label>
+            <label>
+                <input type="checkbox" class="column-toggle" data-column="6" checked>
+                Notes
+            </label>
+        </div>
+    </div>
 
-</div>
+    <div class="table-container">
+        <table id="gamesTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Categories</th>
+                    <th>Skills</th>
+                    <th>Format</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-
-<div class="controls">
-
-    <input 
-        type="text" 
-        id="searchInput" 
-        placeholder="Search games..."
-    >
-
-    <select id="categoryFilter">
-        <option value="">All Categories</option>
-    </select>
-
-</div>
-
-
-<div class="controls">
-
-    <button id="editButton" onclick="enableEditMode()">
-        Edit Mode
-    </button>
-
-    <button id="saveButton" onclick="saveChanges()" disabled>
-        Save Changes
-    </button>
-
-    <button id="cancelButton" onclick="cancelEdit()" disabled>
-        Cancel
-    </button>
-
-</div>
-
-
-<div class="table-container">
-
-<table id="gamesTable">
-
-    <thead>
-
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Categories</th>
-            <th>Skills</th>
-            <th>Format</th>
-            <th>Notes</th>
-        </tr>
-
-    </thead>
-
-    <tbody>
-    </tbody>
-
-</table>
-
-</div>
-
-
-<script>
+    <script>
 
 let games = [];
 let editMode = false;
 let originalGames = [];
 
 
+
 fetch("/games")
 
-    .then(response => {
+.then(response => {
 
-        if (!response.ok) {
-            throw new Error("API request failed");
-        }
+    if (!response.ok) {
+        throw new Error("API request failed");
+    }
 
-        return response.json();
+    return response.json();
 
-    })
+})
 
-    .then(result => {
+.then(result => {
 
-        games = result.data;
+    games = result.data;
 
-        populateCategories();
-        renderGames(games);
+    populateCategories();
+    renderGames(games);
+    loadColumnPreferences();
 
-        document.getElementById("status").textContent =
-            `${games.length} games loaded`;
+    document.getElementById("status").textContent =
+        `${games.length} games loaded`;
 
-    })
+})
 
-    .catch(error => {
+.catch(error => {
 
-        document.getElementById("status").textContent =
-            "Unable to load games";
+    document.getElementById("status").textContent =
+        "Unable to load games";
 
-        console.error(error);
+    console.error(error);
 
-    });
+});
 
 
 
 function renderGames(gameList) {
+            const tbody = document.querySelector("#gamesTable tbody");
+            tbody.innerHTML = "";
 
-    const tbody =
-        document.querySelector("#gamesTable tbody");
+            gameList.forEach(game => {
+                const row = document.createElement("tr");
 
-    tbody.innerHTML = "";
+                row.innerHTML = `
+                    <td>${game.id}</td>
+                    <td>
+                        <input
+                            data-id="${game.id}"
+                            data-field="name"
+                            value="${game.name}"
+                            ${editMode ? "" : "disabled"}>
+                    </td>
+                    <td>
+                        <textarea
+                            data-id="${game.id}"
+                            data-field="description"
+                            ${editMode ? "" : "disabled"}>${game.description}</textarea>
+                    </td>
+                    <td>
+                        <input
+                            data-id="${game.id}"
+                            data-field="categories"
+                            value="${game.categories.join(", ")}"
+                            ${editMode ? "" : "disabled"}>
+                    </td>
+                    <td>
+                        <input
+                            data-id="${game.id}"
+                            data-field="skills_practiced"
+                            value="${game.skills_practiced.join(", ")}"
+                            ${editMode ? "" : "disabled"}>
+                    </td>
+                    <td>
+                        <select
+                            data-id="${game.id}"
+                            data-field="player_format"
+                            ${editMode ? "" : "disabled"}>
+                            <option value="solo" ${game.player_format === "solo" ? "selected" : ""}>Solo</option>
+                            <option value="pairs" ${game.player_format === "pairs" ? "selected" : ""}>Pairs</option>
+                            <option value="small_group" ${game.player_format === "small_group" ? "selected" : ""}>Small Group</option>
+                            <option value="group" ${game.player_format === "group" ? "selected" : ""}>Group</option>
+                            <option value="everyone" ${game.player_format === "everyone" ? "selected" : ""}>Everyone</option>
+                        </select>
+                    </td>
+                    <td>
+                        <textarea
+                            data-id="${game.id}"
+                            data-field="notes"
+                            ${editMode ? "" : "disabled"}>${game.notes || ""}</textarea>
+                    </td>
+                `;
 
+                tbody.appendChild(row);
+            });
 
-    gameList.forEach(game => {
+            applyColumnVisibility();
+        }
 
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>
-                ${game.id}
-            </td>
-
-            <td>
-                <input
-                    data-id="${game.id}"
-                    data-field="name"
-                    value="${game.name}"
-                    ${editMode ? "" : "disabled"}>
-            </td>
-
-            <td>
-                <textarea
-                    data-id="${game.id}"
-                    data-field="description"
-                    ${editMode ? "" : "disabled"}>${game.description}</textarea>
-            </td>
-
-            <td>
-                <input
-                    data-id="${game.id}"
-                    data-field="categories"
-                    value="${game.categories.join(", ")}"
-                    ${editMode ? "" : "disabled"}>
-            </td>
-
-            <td>
-                <input
-                    data-id="${game.id}"
-                    data-field="skills_practiced"
-                    value="${game.skills_practiced.join(", ")}"
-                    ${editMode ? "" : "disabled"}>
-            </td>
-
-            <td>
-                <select
-                    data-id="${game.id}"
-                    data-field="player_format"
-                    ${editMode ? "" : "disabled"}>
-
-                    <option value="solo" ${game.player_format === "solo" ? "selected" : ""}>
-                        Solo
-                    </option>
-
-                    <option value="pairs" ${game.player_format === "pairs" ? "selected" : ""}>
-                        Pairs
-                    </option>
-
-                    <option value="small_group" ${game.player_format === "small_group" ? "selected" : ""}>
-                        Small Group
-                    </option>
-
-                    <option value="group" ${game.player_format === "group" ? "selected" : ""}>
-                        Group
-                    </option>
-
-                    <option value="everyone" ${game.player_format === "everyone" ? "selected" : ""}>
-                        Everyone
-                    </option>
-
-                </select>
-            </td>
-
-            <td>
-                <textarea
-                    data-id="${game.id}"
-                    data-field="notes"
-                    ${editMode ? "" : "disabled"}>${game.notes || ""}</textarea>
-            </td>
-
-        `;
-
-
-        tbody.appendChild(row);
-
-    });
-
-}
-
-
-
-function enableEditMode() {
-
-    editMode = true;
-
-
-    originalGames =
-        JSON.parse(JSON.stringify(games));
-
-
-    document.getElementById("editButton").disabled = true;
-    document.getElementById("saveButton").disabled = false;
-    document.getElementById("cancelButton").disabled = false;
-
-
-    renderGames(games);
-
-
-    document.getElementById("status").textContent =
-        "Edit mode enabled";
-
-}
-
-
-
-function saveChanges() {
-
+        function saveChanges() {
     const inputs =
         document.querySelectorAll(
             "#gamesTable input, #gamesTable textarea, #gamesTable select"
@@ -326,15 +280,12 @@ function saveChanges() {
 
     inputs.forEach(input => {
 
-        const id =
-            input.dataset.id;
+        const game =
+            games.find(game => game.id === input.dataset.id);
+
 
         const field =
             input.dataset.field;
-
-
-        const game =
-            games.find(game => game.id === id);
 
 
         if (
@@ -344,8 +295,8 @@ function saveChanges() {
 
             game[field] =
                 input.value
-                    .split(",")
-                    .map(item => item.trim());
+                .split(",")
+                .map(item => item.trim());
 
         }
 
@@ -369,12 +320,27 @@ function saveChanges() {
 
     renderGames(games);
 
-
     document.getElementById("status").textContent =
         "Changes saved locally";
 
+}
 
-    console.log(games);
+
+
+function enableEditMode() {
+
+    editMode = true;
+
+    originalGames =
+        JSON.parse(JSON.stringify(games));
+
+
+    document.getElementById("editButton").disabled = true;
+    document.getElementById("saveButton").disabled = false;
+    document.getElementById("cancelButton").disabled = false;
+
+
+    renderGames(games);
 
 }
 
@@ -382,9 +348,7 @@ function saveChanges() {
 
 function cancelEdit() {
 
-    games =
-        originalGames;
-
+    games = originalGames;
 
     editMode = false;
 
@@ -396,9 +360,96 @@ function cancelEdit() {
 
     renderGames(games);
 
+}
 
-    document.getElementById("status").textContent =
-        "Changes discarded";
+
+
+function applyColumnVisibility() {
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem("columnVisibility")
+        ) || {};
+
+
+    document.querySelectorAll("#gamesTable tr")
+        .forEach(row => {
+
+            row.querySelectorAll("th, td")
+                .forEach((cell, index) => {
+
+                    if (settings[index] === false) {
+                        cell.style.display = "none";
+                    }
+
+                    else {
+                        cell.style.display = "";
+                    }
+
+                });
+
+        });
+
+}
+
+
+
+document.querySelectorAll(".column-toggle")
+.forEach(toggle => {
+
+    toggle.addEventListener("change", function() {
+
+        const settings =
+            JSON.parse(
+                localStorage.getItem("columnVisibility")
+            ) || {};
+
+
+        settings[this.dataset.column] =
+            this.checked;
+
+
+        localStorage.setItem(
+            "columnVisibility",
+            JSON.stringify(settings)
+        );
+
+
+        applyColumnVisibility();
+
+    });
+
+});
+
+
+
+function loadColumnPreferences() {
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem("columnVisibility")
+        );
+
+
+    if (!settings) {
+        return;
+    }
+
+
+    document.querySelectorAll(".column-toggle")
+    .forEach(toggle => {
+
+        if (settings[toggle.dataset.column] !== undefined) {
+
+            toggle.checked =
+                settings[toggle.dataset.column];
+
+        }
+
+    });
+
+
+    applyColumnVisibility();
 
 }
 
@@ -410,26 +461,17 @@ function populateCategories() {
         document.getElementById("categoryFilter");
 
 
-    const categories =
-        [
-            ...new Set(
-                games.flatMap(game => game.categories)
-            )
-        ];
-
-
-    categories.sort();
-
-
-    categories.forEach(category => {
+    [...new Set(
+        games.flatMap(game => game.categories)
+    )]
+    .sort()
+    .forEach(category => {
 
         const option =
             document.createElement("option");
 
-
         option.value = category;
         option.textContent = category;
-
 
         select.appendChild(option);
 
@@ -439,70 +481,51 @@ function populateCategories() {
 
 
 
-document
-    .getElementById("searchInput")
-    .addEventListener("input", filterGames);
+document.getElementById("searchInput")
+.addEventListener("input", filterGames);
 
 
 
-document
-    .getElementById("categoryFilter")
-    .addEventListener("change", filterGames);
+document.getElementById("categoryFilter")
+.addEventListener("change", filterGames);
 
 
 
 function filterGames() {
 
     if (editMode) {
-
         document.getElementById("status").textContent =
             "Exit Edit Mode before filtering";
-
         return;
-
     }
 
 
     const search =
-        document
-            .getElementById("searchInput")
-            .value
-            .toLowerCase();
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
 
 
     const category =
-        document
-            .getElementById("categoryFilter")
-            .value;
+        document.getElementById("categoryFilter")
+        .value;
 
 
     const filtered =
         games.filter(game => {
 
-
-            const matchesSearch =
-                game.name
-                    .toLowerCase()
-                    .includes(search)
-
+            return (
+                game.name.toLowerCase().includes(search)
                 ||
-
-                game.description
-                    .toLowerCase()
-                    .includes(search);
-
-
-
-            const matchesCategory =
+                game.description.toLowerCase().includes(search)
+            )
+            &&
+            (
                 !category ||
-                game.categories.includes(category);
-
-
-
-            return matchesSearch && matchesCategory;
+                game.categories.includes(category)
+            );
 
         });
-
 
 
     renderGames(filtered);
