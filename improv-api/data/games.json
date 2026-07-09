@@ -2,7 +2,7 @@
   {
     "id": "game_001",
     "name": "Yes, And Circle",
-    "description": "Players build on each other's ideas while practicing agreement and listening.",
+    "description": "Players stand in a circle and tell a story one line at a time. First time, a player says \"Yes, and...\" then adds their own bit to the story.",
     "categories": [
       "warmup",
       "skills",
@@ -10,16 +10,15 @@
     ],
     "skills_practiced": [
       "listening",
-      "agreement",
-      "risk_taking"
+      "agreement"
     ],
     "player_count": "whole_class",
-    "notes": "A simple starting exercise that helps students embrace unexpected ideas."
+    "notes": "After the first round, drop saying \"Yes, and...\" Correct students immediately if someone says \"no\" or \"but\"."
   },
   {
     "id": "game_002",
     "name": "Word Association Chain",
-    "description": "Players quickly respond with related words to build momentum and spontaneity.",
+    "description": "Players stand in a circle. One player says a word, the next player says an associated word, and so on.",
     "categories": [
       "warmup",
       "focus"
@@ -30,7 +29,7 @@
       "focus"
     ],
     "player_count": "small_group",
-    "notes": "Great for warming up attention and encouraging responsive thinking."
+    "notes": "Note exceptionally clever word associations that satisfy the other players. After going around the circle at least once, try repeating everything in reverse to build short-term memory recall. Can also be played like Categories."
   },
   {
     "id": "game_003",
@@ -48,12 +47,12 @@
       "bold_choices"
     ],
     "player_count": "pairs",
-    "notes": "Players directly learn about each other, indirectly learn that bold choices are more fun, even if their assumption is wrong."
+    "notes": "Players directly learn about each other and indirectly learn that bold choices are more fun, even when assumptions are wrong."
   },
-    {
+  {
     "id": "game_004",
     "name": "I Like Biscuits",
-    "description": "Arrange players in a circle, say a random phrase (like I Like Biscuits!) as you walk across the circle and hold eye contact with one person to pass focus. Players attempt to mirror the phrase and action as exactly as possible.",
+    "description": "Arrange players in a circle. Say a random phrase (such as \"I Like Biscuits!\") while walking across the circle and maintaining eye contact with another player to pass focus. Players attempt to mirror the phrase and action as exactly as possible.",
     "categories": [
       "warmup",
       "teambuilding",
@@ -66,6 +65,41 @@
       "bold_choices"
     ],
     "player_count": "whole_class",
-    "notes": "The idea is for players to copy 'exactly what you see' and let your own natural physicality change the action. It's funniest if you don't try to be funny. This is very important. Best played in a safe space where 'mistakes' are celebrated. Should make class dissolve into fits of laugher if done correctly."
+    "notes": "The goal is to copy exactly what you see and allow your own natural physicality to influence the action. It's funniest when you aren't trying to be funny. Best played in a safe environment where mistakes are celebrated."
+  },
+  {
+    "id": "game_005",
+    "name": "New Choice",
+    "description": "Players learn to adapt quickly to a new reality. During a scene, the director can call \"New Choice!\" and players must immediately replace what they just said or did.",
+    "categories": [
+      "performance",
+      "skills"
+    ],
+    "skills_practiced": [
+      "listening",
+      "observation",
+      "risk_taking",
+      "bold_choices"
+    ],
+    "player_count": "pairs",
+    "notes": "Useful for encouraging flexibility and maintaining a safe classroom. If someone says something inappropriate, immediately call \"New Choice!\" This game works especially well after several rounds of Categories."
+  },
+  {
+    "id": "game_006",
+    "name": "Categories",
+    "description": "Players stand in a circle or line. The leader announces a category and players rapidly name items that fit it, either taking turns around the circle or speaking while the leader points at them. Decide ahead of time whether repeated answers are allowed.",
+    "categories": [
+      "warmup",
+      "teambuilding",
+      "skills"
+    ],
+    "skills_practiced": [
+      "listening",
+      "observation",
+      "risk_taking",
+      "bold_choices"
+    ],
+    "player_count": "whole_class",
+    "notes": "This game captures the spirit of saying 'and' in improv. Play it early and often. It also makes an excellent warm-up before Jump-Out games."
   }
 ]
