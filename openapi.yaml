@@ -66,14 +66,15 @@ components:
             - agreement
             - risk_taking
 
-        player_count:
+        player_format:
           type: string
-          description: Recommended group format for the exercise
+          description: Recommended participation format for the exercise
           enum:
             - solo
             - pairs
             - small_group
-            - whole_class
+            - group
+            - everyone
           example: pairs
 
         notes:
