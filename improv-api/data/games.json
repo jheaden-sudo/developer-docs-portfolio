@@ -101,5 +101,27 @@
     ],
     "player_format": "everyone",
     "notes": "This game captures the spirit of saying 'and' in improv. Play it early and often. It also makes an excellent warm-up before Jump-Out games."
+  },
+  {
+    "id": "game_007",
+    "name": "Test",
+    "description": "A test",
+    "categories": [],
+    "skills_practiced": [],
+    "player_format": "group",
+    "notes": ""
+  },
+  {
+    "id": "game_008",
+    "name": "Test Game",
+    "description": "A game for testing",
+    "categories": [
+      "warmup"
+    ],
+    "skills_practiced": [
+      "listening"
+    ],
+    "player_format": "pairs",
+    "notes": "Created during tests"
   }
 ]

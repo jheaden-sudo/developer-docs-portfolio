@@ -1,3 +1,4 @@
+<!-- Polished version placeholder -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,6 +113,31 @@
         <button id="editButton" onclick="enableEditMode()">Edit Mode</button>
         <button id="saveButton" onclick="saveChanges()" disabled>Save Changes</button>
         <button id="cancelButton" onclick="cancelEdit()" disabled>Cancel</button>
+        <button id="addGameButton" onclick="showAddGameForm()">Add Game</button>
+    </div>
+
+    <div id="addGameForm" class="dashboard" style="display:none;">
+        <h2>Add New Game</h2>
+        <form id="gameForm" onsubmit="submitNewGame(event)">
+            <div class="controls" style="flex-direction:column; align-items:flex-start; margin: 10px 0;">
+                <label>Name<br><input type="text" id="newGameName" required></label>
+                <label>Description<br><textarea id="newGameDescription" required></textarea></label>
+                <label>Categories (comma separated)<br><input type="text" id="newGameCategories"></label>
+                <label>Skills (comma separated)<br><input type="text" id="newGameSkills"></label>
+                <label>Format<br><select id="newGameFormat">
+                    <option value="solo">Solo</option>
+                    <option value="pairs">Pairs</option>
+                    <option value="small_group">Small Group</option>
+                    <option value="group" selected>Group</option>
+                    <option value="everyone">Everyone</option>
+                </select></label>
+                <label>Notes<br><textarea id="newGameNotes"></textarea></label>
+            </div>
+            <div class="controls">
+                <button type="submit">Save Game</button>
+                <button type="button" onclick="hideAddGameForm()">Cancel</button>
+            </div>
+        </form>
     </div>
 
     <div class="dashboard">
@@ -172,7 +198,6 @@ let editMode = false;
 let originalGames = [];
 
 
-
 fetch("/games")
 
 .then(response => {
@@ -208,7 +233,46 @@ fetch("/games")
 });
 
 
+function showAddGameForm() {
+    document.getElementById("addGameForm").style.display = "block";
+}
 
+function hideAddGameForm() {
+    document.getElementById("addGameForm").style.display = "none";
+    document.getElementById("gameForm").reset();
+}
+
+async function submitNewGame(event) {
+    event.preventDefault();
+
+    const payload = {
+        name: document.getElementById("newGameName").value.trim(),
+        description: document.getElementById("newGameDescription").value.trim(),
+        categories: document.getElementById("newGameCategories").value.split(",").map(item => item.trim()).filter(Boolean),
+        skills_practiced: document.getElementById("newGameSkills").value.split(",").map(item => item.trim()).filter(Boolean),
+        player_format: document.getElementById("newGameFormat").value,
+        notes: document.getElementById("newGameNotes").value.trim()
+    };
+
+    const response = await fetch("/games", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        document.getElementById("status").textContent = error.error || "Unable to add game";
+        return;
+    }
+
+    const result = await response.json();
+    games.push(result.data);
+    populateCategories();
+    renderGames(games);
+    hideAddGameForm();
+    document.getElementById("status").textContent = `Added ${result.data.name}`;
+}
 function renderGames(gameList) {
             const tbody = document.querySelector("#gamesTable tbody");
             tbody.innerHTML = "";
@@ -413,98 +477,62 @@ document.querySelectorAll(".column-toggle")
             "columnVisibility",
             JSON.stringify(settings)
         );
-
-
         applyColumnVisibility();
-
     });
-
 });
 
-
-
 function loadColumnPreferences() {
-
     const settings =
         JSON.parse(
             localStorage.getItem("columnVisibility")
         );
 
-
     if (!settings) {
         return;
     }
 
-
     document.querySelectorAll(".column-toggle")
     .forEach(toggle => {
-
         if (settings[toggle.dataset.column] !== undefined) {
-
             toggle.checked =
                 settings[toggle.dataset.column];
-
         }
-
     });
-
 
     applyColumnVisibility();
-
 }
-
-
 
 function populateCategories() {
+    const select = document.getElementById("categoryFilter");
+    select.innerHTML = '<option value="">All Categories</option>';
 
-    const select =
-        document.getElementById("categoryFilter");
-
-
-    [...new Set(
-        games.flatMap(game => game.categories)
-    )]
-    .sort()
-    .forEach(category => {
-
-        const option =
-            document.createElement("option");
-
-        option.value = category;
-        option.textContent = category;
-
-        select.appendChild(option);
-
-    });
-
+    [...new Set(games.flatMap(game => game.categories))]
+        .sort()
+        .forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            select.appendChild(option);
+        });
 }
-
-
 
 document.getElementById("searchInput")
 .addEventListener("input", filterGames);
 
-
-
 document.getElementById("categoryFilter")
 .addEventListener("change", filterGames);
 
-
-
 function filterGames() {
-
     if (editMode) {
         document.getElementById("status").textContent =
             "Exit Edit Mode before filtering";
         return;
     }
 
-
     const search =
         document.getElementById("searchInput")
         .value
         .toLowerCase();
-
 
     const category =
         document.getElementById("categoryFilter")
@@ -526,7 +554,6 @@ function filterGames() {
             );
 
         });
-
 
     renderGames(filtered);
 
