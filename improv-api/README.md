@@ -1,5 +1,19 @@
 # Tiny Improv API
 
+A small REST API that provides structured information about improv games.
+
+This project was created as a developer-documentation portfolio project. It demonstrates API documentation, OpenAPI, developer-focused examples, and documentation designed to help users understand and use an API quickly and accurately.
+
+## What the API Does
+
+The API currently provides:
+
+- A list of available improv games
+- Game descriptions and categories
+- Skills practiced
+- Player format
+- Instructor notes
+
 This API serves a small collection of improv game ideas as JSON. It is a simple Express server that currently exposes an endpoint for retrieving available games.
 
 An Express server is a lightweight web framework for Node.js that makes it easy to build APIs and web applications. It helps you define routes, handle requests, and send responses in a simple way.
