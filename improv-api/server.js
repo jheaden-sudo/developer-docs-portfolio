@@ -1,16 +1,25 @@
 const express = require("express");
+<<<<<<< Updated upstream
 const fs = require("fs");
 const path = require("path");
+=======
+const { loadGames } = require("./gameData");
+
+>>>>>>> Stashed changes
 const app = express();
 const PORT = 3000;
 const gamesFilePath = path.join(__dirname, "data", "games.json");
 
+<<<<<<< Updated upstream
 let games = require("./data/games.json");
 
 app.use(express.json());
 app.use(express.static("public"));
 
+=======
+>>>>>>> Stashed changes
 app.get("/games", (req, res) => {
+  const games = loadGames();
   res.json({
     data: games
   });
